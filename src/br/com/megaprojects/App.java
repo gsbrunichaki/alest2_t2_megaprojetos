@@ -51,7 +51,9 @@ public class App {
 				System.out.print("\n");
 			}*/
 			
-			//g.dfs(g.vertices.get(g.getInitVertice()));
+			//System.out.println(g.dfs(g.vertices.get(g.getInitVertice())));
+			g.dfs(g.vertices.get(g.getInitVertice()));
+			System.out.println("Ciclo: " + g.isCyclical());
 			
 			//g.allEdges();
 			

@@ -7,7 +7,7 @@ public class Activity {
 	private String name;
 	private int value;
 	private boolean visited;
-	private boolean inPath;
+	private boolean endAdj;
 	private BigInteger accumulated;
 	ArrayList<Integer> weight;
 	ArrayList<Activity> adj;
@@ -41,12 +41,12 @@ public class Activity {
 		this.visited = visited;
 	}
 	
-	public boolean isInPath() {
-		return visited;
+	public boolean isEndAdj() {
+		return endAdj;
 	}
 
-	public void setInPath(boolean inPath) {
-		this.inPath = inPath;
+	public void setEndAdj(boolean endAdj) {
+		this.endAdj = endAdj;
 	}
 
 	public String getAccumulated() {

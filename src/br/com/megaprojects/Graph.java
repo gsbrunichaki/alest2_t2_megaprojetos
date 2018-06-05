@@ -10,12 +10,14 @@ import java.util.Stack;
 public class Graph {
 	private int totVertices;
 	private int totEdges;
+	private boolean cyclical;
 	Map<String, Activity> vertices;
 	ArrayList<String> initVertice;
 	Stack<String> inPath;
 	
 	public Graph(int totVertices) {
 		this.totVertices = totVertices;
+		cyclical = false;
 		vertices = new HashMap<String, Activity>(totVertices);
 		initVertice = new ArrayList<String>(totVertices);
 		inPath = new Stack<String>();
@@ -28,6 +30,10 @@ public class Graph {
 	public int getTotEdges() {
 		return totEdges;
 	}
+	
+	public boolean isCyclical() {
+		return this.cyclical;
+	}
 
 	public void setTotEdges(int totEdges) {
 		this.totEdges = totEdges;
@@ -37,21 +43,35 @@ public class Graph {
 		v1.adj.add(v2);
 	}
 	
-	public void dfs(Activity v) {		
-		if(!v.isVisited()) {
-			v.setVisited(true);
-			//System.out.println("Visita  " + v.getName());
-			
-			for (int i = 0; i < v.adj.size(); i++) {
-				dfs(v.adj.get(i));
+	public void dfs(Activity v) {
+		if(!cyclical) {
+			if(!v.isVisited()) {
+				v.setVisited(true);
+				//System.out.println("Visita  " + v.getName());
 				
-				//System.out.println("Devolve " + v.adj.get(i).getName() + " (" + v.adj.get(i).getValue() + " * " + v.weight.get(i) + ")");				
+				for (int i = 0; i < v.adj.size(); i++) {
+					if(!v.isEndAdj()) {
+						//System.out.println("endAdj: " + v.adj.get(i).getName() + " " + v.adj.get(i).isEndAdj());
+						dfs(v.adj.get(i));
+					
+						//System.out.println("Devolve " + v.adj.get(i).getName());				
+						
+						//v.incTotValue(v.adj.get(i).getTotValue() * v.weight.get(i));
+						v.setAccumulated(new BigInteger(v.adj.get(i).getAccumulated()).multiply(new BigInteger(Integer.toString(v.weight.get(i)))));
+						//System.out.println(v.adj.get(i).getName() + " => " + v.getName());
+						//System.out.println(v.getName() + " => " + v.getAccumulated());
+						//System.out.print("\n");
+					}
+				}
 				
-				//v.incTotValue(v.adj.get(i).getTotValue() * v.weight.get(i));
-				v.setAccumulated(new BigInteger(v.adj.get(i).getAccumulated()).multiply(new BigInteger(Integer.toString(v.weight.get(i)))));
-				System.out.println(v.adj.get(i).getName() + " => " + v.getName());
-				System.out.println(v.getName() + " => " + v.getAccumulated());
-				System.out.print("\n");
+				//System.out.println("Acabou filhos aqui " + v.getName());
+				v.setEndAdj(true);
+				//System.out.println("endAdj: " + v.getName() + " " + v.isEndAdj());
+			} else {
+				if(!v.isEndAdj()) {
+					//System.out.println("Ciclo!");
+					cyclical = true;
+				}
 			}
 		}
 	}

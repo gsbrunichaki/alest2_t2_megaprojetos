@@ -10,9 +10,11 @@ import java.util.StringTokenizer;
 
 public class App {
 	
-	public static void main(String[] args) {
+	public static void calcProject(String file) {
+		long initTime = System.currentTimeMillis();
+		
 		try {
-			FileReader flr = new FileReader("caso1000.txt");
+			FileReader flr = new FileReader(file);
 			BufferedReader bfr = new BufferedReader(flr);
 			Graph g = new Graph(Integer.parseInt(bfr.readLine()));
 			
@@ -24,10 +26,6 @@ public class App {
 				g.vertices.put(actName, new Activity(actName, actValue));
 				g.initVertice.add(actName);
 			}
-			
-			/*for (int i = 0; i < g.vertices.size(); i++) {
-				System.out.println((i + 1) + " => " + g.vertices.get(i));
-			}*/
 			
 			g.setTotEdges(Integer.parseInt(bfr.readLine()));
 			
@@ -41,46 +39,36 @@ public class App {
 				g.removeInitVertice(v2);
 			}
 			
-			/*for (String activity : g.vertices.keySet()) {
-				System.out.println(activity + ":");
-				
-				for (int i = 0; i < g.vertices.get(activity).adj.size(); i++) {
-					System.out.println(g.vertices.get(activity).adj.get(i));
-				}
-				
-				System.out.print("\n");
-			}*/
-			
-			//System.out.println(g.dfs(g.vertices.get(g.getInitVertice())));
 			g.dfs(g.vertices.get(g.getInitVertice()));
-			System.out.println("Ciclo: " + g.isCyclical());
-			
-			//g.allEdges();
-			
-			/*System.out.println(g.vertices.get("GMZ").getAccumulated());
-			g.vertices.get("GMZ").setAccumulated(new BigInteger("10"));
-			System.out.println(g.vertices.get("GMZ").getAccumulated());
-			g.vertices.get("GMZ").setAccumulated(new BigInteger("25").multiply(new BigInteger("2")));
-			System.out.println(g.vertices.get("GMZ").getAccumulated());*/
 			
 			bfr.close();
 			flr.close();
+			
+			double finTime = System.currentTimeMillis() - initTime;
+			
+			System.out.printf("Arquivo:\t\t" + file);
+			
+			if(g.isCyclical()) {
+				System.out.println("\nNão foi possível concluir o cálculo do projeto, pois um ciclo foi detectado!");
+			} else {
+				System.out.printf("\nCusto total:\t\t" + g.vertices.get(g.getInitVertice()).getAccumulated());
+				System.out.printf("\nTempo de execucao:\t" + finTime/1000 + "\n");
+			}
+			System.out.print("\n");
 		} catch(IOException e) {
-			System.err.print("Erro ao ler o arquivo " + "casoxxxx.txt" + "\n");
+			System.err.print("Erro ao ler o arquivo " + file + "\n");
 			e.getMessage();
 		}
 	}
 	
-	/*public static boolean isInt(String s) {
-		boolean valInt = false;
-		
-		try {
-			Integer.parseInt(s);
-			valInt = true;
-		} catch(NumberFormatException e) {
+	public static void main(String[] args) {
+		calcProject("caso0010.txt");
+		calcProject("caso0100.txt");
+		calcProject("caso0200.txt");
+		calcProject("caso0400.txt");
+		calcProject("caso0600.txt");
+		calcProject("caso0800.txt");
+		calcProject("caso1000.txt");
+	}
 
-		}
-		
-		return valInt;
-	}*/
 }

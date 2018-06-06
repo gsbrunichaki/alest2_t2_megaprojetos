@@ -39,6 +39,10 @@ public class Graph {
 		this.totEdges = totEdges;
 	}
 	
+	public String getInitVertice() {
+		return initVertice.get(0);
+	}
+	
 	public void addEdge(Activity v1, Activity v2) {
 		v1.adj.add(v2);
 	}
@@ -47,29 +51,20 @@ public class Graph {
 		if(!cyclical) {
 			if(!v.isVisited()) {
 				v.setVisited(true);
-				//System.out.println("Visita  " + v.getName());
 				
 				for (int i = 0; i < v.adj.size(); i++) {
 					if(!v.isEndAdj()) {
-						//System.out.println("endAdj: " + v.adj.get(i).getName() + " " + v.adj.get(i).isEndAdj());
 						dfs(v.adj.get(i));
-					
-						//System.out.println("Devolve " + v.adj.get(i).getName());				
 						
-						//v.incTotValue(v.adj.get(i).getTotValue() * v.weight.get(i));
-						v.setAccumulated(new BigInteger(v.adj.get(i).getAccumulated()).multiply(new BigInteger(Integer.toString(v.weight.get(i)))));
-						//System.out.println(v.adj.get(i).getName() + " => " + v.getName());
-						//System.out.println(v.getName() + " => " + v.getAccumulated());
-						//System.out.print("\n");
+						v.setAccumulated(
+							new BigInteger(v.adj.get(i).getAccumulated()).multiply(new BigInteger(Integer.toString(v.weight.get(i))))
+						);
 					}
 				}
 				
-				//System.out.println("Acabou filhos aqui " + v.getName());
 				v.setEndAdj(true);
-				//System.out.println("endAdj: " + v.getName() + " " + v.isEndAdj());
 			} else {
 				if(!v.isEndAdj()) {
-					//System.out.println("Ciclo!");
 					cyclical = true;
 				}
 			}
@@ -91,8 +86,5 @@ public class Graph {
 			}
 		}
 	}
-	
-	public String getInitVertice() {
-		return initVertice.get(0);
-	}
+
 }
